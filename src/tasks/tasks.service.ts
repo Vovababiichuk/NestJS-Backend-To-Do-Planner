@@ -33,6 +33,7 @@ export class TasksService {
   // }
 
   async update(id: string, updateTaskDto: UpdateTaskDto): Promise<Task> {
+    console.log('testBack - update', id, updateTaskDto)
     // Замість findByIdAndUpdate використовуємо findOneAndUpdate з $set
     // для часткового оновлення документа
     return this.taskModel.findOneAndUpdate(
@@ -49,6 +50,7 @@ export class TasksService {
   // }
 
   async updateTask(id: string, toggleTaskDone: UpdateTaskDto): Promise<Task> {
+    console.log('testBack - updateTask', id, toggleTaskDone)
     // Замість findByIdAndUpdate використовуємо findOneAndUpdate з $set
     // для часткового оновлення документа
     return this.taskModel.findOneAndUpdate(
