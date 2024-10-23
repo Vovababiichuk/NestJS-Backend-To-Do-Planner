@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateTaskDto } from './dto/create-task.dto';
@@ -7,6 +7,7 @@ import { Task, TaskDocument } from './schemas/task.schema';
 
 @Injectable()
 export class TasksService {
+  private readonly logger = new Logger(TasksService.name);
   constructor(@InjectModel(Task.name) private taskModel: Model<TaskDocument>) {}
 
   async getAll(): Promise<Task[]> {
@@ -18,6 +19,7 @@ export class TasksService {
   }
 
   async create(taskDto: CreateTaskDto): Promise<Task> {
+    this.logger.log('testBack - create', taskDto)
     const newTask = new this.taskModel(taskDto);
     return newTask.save();
   }
@@ -34,6 +36,7 @@ export class TasksService {
 
   async update(id: string, updateTaskDto: UpdateTaskDto): Promise<Task> {
     console.log('testBack - update', id, updateTaskDto)
+    this.logger.log('testBack - update', id, updateTaskDto)
     // Замість findByIdAndUpdate використовуємо findOneAndUpdate з $set
     // для часткового оновлення документа
     return this.taskModel.findOneAndUpdate(
