@@ -29,7 +29,11 @@ export class TasksService {
 
   async create(taskDto: CreateTaskDto): Promise<Task> {
     this.logger.log(`Creating a new task: ${JSON.stringify(taskDto)}`);
-    const newTask = new this.taskModel(taskDto);
+    const newTask = new this.taskModel({
+      ...taskDto,
+      createdDate: new Date(),
+      updatedDate: new Date(),
+    });
     const savedTask = await newTask.save();
     this.logger.log(`Task created with id: ${savedTask._id}`);
     return savedTask;
@@ -48,7 +52,11 @@ export class TasksService {
 
   async update(id: string, updateTaskDto: UpdateTaskDto): Promise<Task> {
     this.logger.log(`Updating task with id: ${id} with data: ${JSON.stringify(updateTaskDto)}`);
-    const updatedTask = await this.taskModel.findByIdAndUpdate(id, updateTaskDto, { new: true });
+    const updatedTask = await this.taskModel.findByIdAndUpdate(
+      id,
+      { $set: { ...updateTaskDto, updatedDate: new Date() } },
+      { new: true },
+    );
     if (updatedTask) {
       this.logger.log(`Task with id ${id} updated successfully`);
     } else {
@@ -61,7 +69,7 @@ export class TasksService {
     this.logger.log(`Updating task with id: ${id} with data: ${JSON.stringify(toggleTaskDone)}`);
     const updatedTask = await this.taskModel.findOneAndUpdate(
       { _id: id },
-      { $set: toggleTaskDone },
+      { $set: { ...toggleTaskDone, updatedDate: new Date() } },
       { new: true },
     );
     if (updatedTask) {
