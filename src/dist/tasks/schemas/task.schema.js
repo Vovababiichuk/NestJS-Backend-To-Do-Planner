@@ -21,7 +21,7 @@ __decorate([
 __decorate([
     (0, mongoose_1.Prop)(),
     __metadata("design:type", Boolean)
-], Task.prototype, "done", void 0);
+], Task.prototype, "isDone", void 0);
 exports.Task = Task = __decorate([
     (0, mongoose_1.Schema)()
 ], Task);
