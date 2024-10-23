@@ -24,27 +24,58 @@ let TasksService = TasksService_1 = class TasksService {
         this.logger = new common_1.Logger(TasksService_1.name);
     }
     async getAll() {
-        return this.taskModel.find().exec();
+        this.logger.log('Fetching all tasks');
+        const tasks = await this.taskModel.find().exec();
+        this.logger.log(`Fetched ${tasks.length} tasks`);
+        return tasks;
     }
     async getById(id) {
-        return this.taskModel.findById(id);
+        this.logger.log(`Fetching task by id: ${id}`);
+        const task = await this.taskModel.findById(id);
+        if (!task) {
+            this.logger.warn(`Task with id ${id} not found`);
+        }
+        return task;
     }
     async create(taskDto) {
-        this.logger.log('testBack - create', taskDto);
+        this.logger.log(`Creating a new task: ${JSON.stringify(taskDto)}`);
         const newTask = new this.taskModel(taskDto);
-        return newTask.save();
+        const savedTask = await newTask.save();
+        this.logger.log(`Task created with id: ${savedTask._id}`);
+        return savedTask;
     }
     async remove(id) {
-        return this.taskModel.findByIdAndDelete(id);
+        this.logger.log(`Removing task with id: ${id}`);
+        const deletedTask = await this.taskModel.findByIdAndDelete(id);
+        if (deletedTask) {
+            this.logger.log(`Task with id ${id} deleted`);
+        }
+        else {
+            this.logger.warn(`Task with id ${id} not found for deletion`);
+        }
+        return deletedTask;
     }
     async update(id, updateTaskDto) {
-        console.log('testBack - update', id, updateTaskDto);
-        this.logger.log('testBack - update', id, updateTaskDto);
-        return this.taskModel.findOneAndUpdate({ _id: id }, { $set: updateTaskDto }, { new: true });
+        this.logger.log(`Updating task with id: ${id} with data: ${JSON.stringify(updateTaskDto)}`);
+        const updatedTask = await this.taskModel.findByIdAndUpdate(id, updateTaskDto, { new: true });
+        if (updatedTask) {
+            this.logger.log(`Task with id ${id} updated successfully`);
+        }
+        else {
+            this.logger.warn(`Task with id ${id} not found for update`);
+        }
+        return updatedTask;
     }
     async updateTask(id, toggleTaskDone) {
-        console.log('testBack - updateTask', id, toggleTaskDone);
-        return this.taskModel.findOneAndUpdate({ _id: id }, { $set: toggleTaskDone }, { new: true });
+        this.logger.log(`Updating task with id: ${id} with data: ${JSON.stringify(toggleTaskDone)}`);
+        const updatedTask = await this.taskModel.findOneAndUpdate({ _id: id }, { $set: toggleTaskDone }, { new: true });
+        if (updatedTask) {
+            this.logger.log(`Task with id ${id} updated successfully`);
+        }
+        else {
+            this.logger.warn(`Task with id ${id} not found for update`);
+        }
+        return updatedTask;
     }
 };
 exports.TasksService = TasksService;
