@@ -26,15 +26,35 @@ export class TasksService {
     return this.taskModel.findByIdAndDelete(id);
   }
 
+  // async update(id: string, updateTaskDto: UpdateTaskDto): Promise<Task> {
+  //   return await this.taskModel.findByIdAndUpdate(id, updateTaskDto, {
+  //     new: true,
+  //   });
+  // }
+
   async update(id: string, updateTaskDto: UpdateTaskDto): Promise<Task> {
-    return await this.taskModel.findByIdAndUpdate(id, updateTaskDto, {
-      new: true,
-    });
+    // Замість findByIdAndUpdate використовуємо findOneAndUpdate з $set
+    // для часткового оновлення документа
+    return this.taskModel.findOneAndUpdate(
+      { _id: id }, // Знаходимо документ за _id
+      { $set: updateTaskDto }, // Оновлюємо лише вказані поля
+      { new: true }, // Повертаємо оновлений документ
+    );
   }
 
+  // async updateTask(id: string, toggleTaskDone: UpdateTaskDto): Promise<Task> {
+  //   return await this.taskModel.findByIdAndUpdate(id, toggleTaskDone, {
+  //     new: true,
+  //   });
+  // }
+
   async updateTask(id: string, toggleTaskDone: UpdateTaskDto): Promise<Task> {
-    return await this.taskModel.findByIdAndUpdate(id, toggleTaskDone, {
-      new: true,
-    });
+    // Замість findByIdAndUpdate використовуємо findOneAndUpdate з $set
+    // для часткового оновлення документа
+    return this.taskModel.findOneAndUpdate(
+      { _id: id }, // Знаходимо документ за _id
+      { $set: toggleTaskDone }, // Оновлюємо лише вказані поля
+      { new: true }, // Повертаємо оновлений документ
+    );
   }
 }
