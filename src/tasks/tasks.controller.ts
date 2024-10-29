@@ -43,12 +43,12 @@ export class TasksController {
   }
 
   @Put(':id')
-  update(@Body() updateTaskDto: UpdateTaskDto, @Param('id') id: string): Promise<Task> {
-    return this.tasksService.update(id, updateTaskDto);
+  updateFull(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto): Promise<Task> {
+    return this.tasksService.updateFull(id, updateTaskDto);
   }
 
   @Patch(':id')
-  updateTask(@Body() toggleTaskDone: UpdateTaskDto, @Param('id') id: string): Promise<Task> {
-    return this.tasksService.updateTask(id, toggleTaskDone);
+  patchTask(@Body() toggleTaskDone: UpdateTaskDto, @Param('id') id: string): Promise<Task> {
+    return this.tasksService.patchTask(id, toggleTaskDone);
   }
 }

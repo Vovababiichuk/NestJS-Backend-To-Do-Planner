@@ -5,10 +5,10 @@ export type TaskDocument = Task & Document;
 
 @Schema()
 export class Task {
-  @Prop()
+  @Prop({ required: true })
   text: string;
 
-  @Prop()
+  @Prop({ default: false })
   isDone: boolean;
 
   @Prop({ type: Date, default: Date.now })
